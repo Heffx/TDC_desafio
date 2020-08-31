@@ -37,6 +37,11 @@
                                         Lojas
                                     </a>
                                 </li>
+                                <li class="nav-item mx-2">
+                                    <a class="nav-link" href="{{route('users.index')}}">
+                                        Usuários
+                                    </a>
+                                </li>
                             @endif
                             @if(\Illuminate\Support\Facades\Auth::user()->type_user == 'Store')
                                 <li class="nav-item">
