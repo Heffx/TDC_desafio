@@ -30,3 +30,20 @@
         <input placeholder="Telefone" type="text" class="form-control" id="phone" name="phone" value="{{old('phone',null)}}" required>
     </div>
 </div>
+
+<!--Email-->
+<div class="form-group">
+    <label for="email" class="col-sm-2 col-form-label .col-form-label">Email</label>
+    <div>
+        <input placeholder="Email" type="email" class="form-control" id="email" name="email" value="{{old('email',null)}}" required>
+    </div>
+</div>
+
+<!--Password-->
+<div class="form-group">
+    <label for="password" class="col-sm-2 col-form-label .col-form-label">Senha</label>
+    <div>
+        <input placeholder="Senha" type="password" class="form-control" id="password" name="password" value="{{old('password',null)}}" required>
+    </div>
+</div>
+

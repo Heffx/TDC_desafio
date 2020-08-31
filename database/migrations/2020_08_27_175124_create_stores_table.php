@@ -20,7 +20,8 @@ class CreateStoresTable extends Migration
             $table->string('document_number');
             $table->string('address');
             $table->string('phone');
-
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->on('users')->references('id');
         });
     }
 

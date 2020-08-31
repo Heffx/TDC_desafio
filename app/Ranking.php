@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ranking extends Model
 {
     protected $fillable = [
-        'rating','comment',
+        'rating','comment','product_id','store_id'
     ];
 
     public function Store()

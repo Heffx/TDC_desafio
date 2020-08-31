@@ -16,9 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::group(['middleware' => 'auth'], function (){
+
+});
+
 Route::resource('stores','StoreController');
 Route::resource('products', 'ProductController');
 Route::resource('rankings','RankingController');
+Route::resource('users', 'UserController');
+Route::resource('reports','ReportController');
 
 Auth::routes();
 

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Store;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use const http\Client\Curl\AUTH_GSSNEG;
 
 class ProductController extends Controller
 {
@@ -14,7 +18,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('products_index',Product::all());
+        if(Auth::check()){
+            return view('products_index',Product::where('store_id', Auth::user()->Store->id)->get());
+        }else{
+            return redirect()->route('login');
+        }
+
+
     }
 
     /**
@@ -24,7 +34,17 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products_create');
+        // get current logged in user
+        if (Auth::check()){
+            $user = Auth::user();
+        }else{
+            return redirect()->route('login');
+        }
+        if ($user->can('create', Product::class)) {
+            return view('products_create');
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -36,6 +56,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validatedData = $this->validate($request, $this->rulesStore());
+        $validatedData['store_id'] = Auth::user()->Store->id;
         $this->model()::create($validatedData);
         return view('products_index', Product::all());
     }

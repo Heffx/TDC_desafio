@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Store;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StoreController extends Controller
 {
@@ -14,7 +16,11 @@ class StoreController extends Controller
      */
     public function index()
     {
-        return view('stores_index',Store::all());
+        if(Auth::check()){
+            return view('stores_index',Store::all());
+        }else{
+            return redirect()->route('login');
+        }
     }
 
     /**
@@ -24,7 +30,17 @@ class StoreController extends Controller
      */
     public function create()
     {
-        return view('stores_create');
+        // get current logged in user
+        if (Auth::check()){
+            $user = Auth::user();
+        }else{
+            return redirect()->route('login');
+        }
+        if ($user->can('create', Store::class)) {
+            return view('stores_create');
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -35,9 +51,15 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedDataUser = $this->validate($request, $this->rulesStoreUser());
+        $validatedDataUser['type_user'] = 'Store';
+        $validatedDataUser['password'] = bcrypt($validatedDataUser['password']);
+        $user = new User();
+        $user = $user->create($validatedDataUser);
         $validatedData = $this->validate($request, $this->rulesStore());
+        $validatedData['user_id'] = $user->id;
         $this->model()::create($validatedData);
-        return view('stores_index', Store::all());
+        return view('stores_index',Store::all());
     }
 
     /**
@@ -112,6 +134,16 @@ class StoreController extends Controller
             'document_number' => 'always|string|size:11',
             'address' => 'always|string',
             'phone' => 'always|string',
+        ];
+    }
+
+    protected function rulesStoreUser(){
+        return[
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|between:6,12',
+            //'type_user' => 'required|in:'.implode(',',User::TYPE_USER),
+
         ];
     }
 

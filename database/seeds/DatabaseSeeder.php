@@ -13,14 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => 'Usuario',
-            'email' => 'user@site.com',
-            'password' => Hash::make('12345678'),
-        ]);
-        DB::table('admins')->insert([
             'name' => 'Administrador',
-            'email' => 'admin@site.com',
+            'email' => 'admin@admin.com',
             'password' => Hash::make('12345678'),
+            'type_user' => 'Admin'
         ]);
         $this->call(StoreSeeder::class);
         $this->call(ProductSeeder::class);

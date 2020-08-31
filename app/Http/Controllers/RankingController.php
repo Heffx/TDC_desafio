@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Product;
 use App\Ranking;
+use App\Store;
 use Illuminate\Http\Request;
 
 class RankingController extends Controller
@@ -14,9 +16,8 @@ class RankingController extends Controller
      */
     public function index()
     {
-        return $this->model()::all();
+        return view('ranking_index',Store::all());
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -37,6 +38,7 @@ class RankingController extends Controller
     {
         $validatedData = $this->validate($request, $this->rulesStore());
         $this->model()::create($validatedData);
+        return view('ranking_index',Store::all());
     }
 
     /**
@@ -87,9 +89,7 @@ class RankingController extends Controller
     protected function rulesStore(){
         return[
             'rating' => 'required|numeric|between:0,5',
-            'document_number' => 'required|string',
-            'address' => 'required|string',
-            'phone' => 'required|string',
+            'comment' => 'required|string',
         ];
     }
 
